@@ -82,7 +82,7 @@ class NfeFader extends HTMLElement {
     private _dragStartY: number = 0;
     private _dragStartValue: number = 0;
     private _thumb!: HTMLElement;
-    private _valueDislay!: HTMLElement;
+    private _valueDisplay!: HTMLElement;
     private _labelEl!: HTMLElement;
 
     constructor() {
@@ -94,11 +94,11 @@ class NfeFader extends HTMLElement {
         shadow.innerHTML = createTemplate();
 
         this._thumb = shadow.querySelector('.thumb') as HTMLElement;
-        this._valueDislay = shadow.querySelector('.value-display') as HTMLElement;
+        this._valueDisplay = shadow.querySelector('.value-display') as HTMLElement;
         this._labelEl = shadow.querySelector('.label') as HTMLElement;
 
         this._onMouseDown = this._onMouseDown.bind(this);
-        this._onMouseMove = this._onMouseMoove.bind(this);
+        this._onMouseMove = this._onMouseMove.bind(this);
         this._onMouseUp = this._onMouseUp.bind(this);
     }
 
@@ -133,6 +133,7 @@ class NfeFader extends HTMLElement {
                 this._label = newValue;
                 break;
         }
+        this._render();
     }
 
 
