@@ -14,7 +14,9 @@ interface FaderAttributes {
     max: string;
     label: string;
 }
-
+interface FaderChangeDetail {
+  value: number;
+}
 // --TEMPLATE--
 
 function createTemplate(): string {
@@ -125,9 +127,11 @@ class NfeFader extends HTMLElement {
                 break;
             case 'min':
                 this._min = parseFloat(newValue);
+                this._value = Math.max(this._value, this._min);
                 break;
             case 'max':
                 this._max = parseFloat(newValue);
+                this._value = Math.min(this._value, this._max);
                 break;
             case 'label':
                 this._label = newValue;
@@ -191,13 +195,16 @@ class NfeFader extends HTMLElement {
     }
 
     private _emitChange(): void{
-        const evento = new CustomEvent(EVENT_NAME, {
+        const detail: FaderChangeDetail = {value: this._value};
+        const evento = new CustomEvent<FaderChangeDetail>(EVENT_NAME, {
             detail: {value: this._value},
             bubbles: true,
             composed: true
         });
-        this.dispatchEvent(evento)
+        this.dispatchEvent(evento);
+           
     }
 }
 
     customElements.define(TAG_NAME, NfeFader)
+    export type { FaderChangeDetail };
