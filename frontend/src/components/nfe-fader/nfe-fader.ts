@@ -165,5 +165,39 @@ class NfeFader extends HTMLElement {
         if(!this._isDragging) return;
 
         const delta = this._dragStartY - e.clientY;
+        const sensitivity = (this._max - this._min) / DRAG_SENSITIVITY_PX
+        const rawValue = this._dragStartValue + delta * sensitivity;
+        this._value = Math.min(Math.max(rawValue, this._min), this._max);
+
+        this._render();
+        this._emitChange();
+    }
+
+    private _onMouseUp(): void{
+        this._isDragging = false;
+        document.removeEventListener('mousemove', this._onMouseMove)
+        document.removeEventListener('mouseup', this._onMouseUp);
+    }
+
+    private _render(): void{
+        const range = this._max - this._min;
+        const percentage = range === 0 ? 0 : ((this._value - this._min) / range ) * 100;
+        const availableHeight = TRACK_HEIGHT_PX - THUMB_HEIGHT_PX;
+        const offsetY = ((100 - percentage) / 100) * availableHeight;
+
+        this._thumb.style.transform = `translateY(${offsetY}px)`;
+        this._valueDisplay.textContent = String(Math.round(this._value));
+        this._labelEl.textContent = this._label;
+    }
+
+    private _emitChange(): void{
+        const evento = new CustomEvent(EVENT_NAME, {
+            detail: {value: this._value},
+            bubbles: true,
+            composed: true
+        });
+        this.dispatchEvent(evento)
     }
 }
+
+    customElements.define(TAG_NAME, NfeFader)
