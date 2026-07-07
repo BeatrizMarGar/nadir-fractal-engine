@@ -1,4 +1,4 @@
-import { createEmptyGrid, randomGrid, countNeighbors, nextGeneration } from './gameOfLife';
+import { createEmptyGrid, countNeighbors, nextGeneration } from './gameOfLife';
 
 describe('Pruebas unitarias para el motor Game of Life', () => {
 

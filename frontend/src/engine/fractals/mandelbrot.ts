@@ -3,8 +3,8 @@ import type { MandelbrotParams, IterationMatrix } from '../types';
 const ESCAPE_RADIUS_SQ = 4;
 const BASE_WIDTH = 3.5;
 const BASE_HEIGHT = 2.5;
-const DEFAULT_CENTER_X = -0.75;
-const DEFAULT_CENTER_Y = 0;
+export const DEFAULT_CENTER_X = -0.75;
+export const DEFAULT_CENTER_Y = 0;
 
 export function escapeTime(
   cReal: number,

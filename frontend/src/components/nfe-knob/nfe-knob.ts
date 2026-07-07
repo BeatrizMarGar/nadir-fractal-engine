@@ -8,7 +8,7 @@ const TAG_NAME = 'nfe-knob';
 
 // - INTERFAZ TYPESCRIPT
 
-interface KnobAttributes {
+export interface KnobAttributes {
     value: string;
     min: string;
     max: string;

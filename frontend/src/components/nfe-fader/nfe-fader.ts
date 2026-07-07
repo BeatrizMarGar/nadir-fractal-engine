@@ -8,13 +8,13 @@ const TAG_NAME = 'nfe-fader';
 
 // --TIPOS-- 
 
-interface FaderAttributes {
+export interface FaderAttributes {
     value: string;
     min: string;
     max: string;
     label: string;
 }
-interface FaderChangeDetail {
+export interface FaderChangeDetail {
   value: number;
 }
 // --TEMPLATE--
@@ -194,17 +194,15 @@ class NfeFader extends HTMLElement {
         this._labelEl.textContent = this._label;
     }
 
-    private _emitChange(): void{
-        const detail: FaderChangeDetail = {value: this._value};
+    private _emitChange(): void {
+        const detail: FaderChangeDetail = { value: this._value };
         const evento = new CustomEvent<FaderChangeDetail>(EVENT_NAME, {
-            detail: {value: this._value},
+            detail,        // ← usa la variable, no repitas { value: this._value }
             bubbles: true,
             composed: true
         });
         this.dispatchEvent(evento);
-           
     }
 }
 
     customElements.define(TAG_NAME, NfeFader)
-    export type { FaderChangeDetail };
