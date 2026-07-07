@@ -36,9 +36,14 @@ function createTemplate(): string {
             .knob-wrapper {
                 width: 48px;
                 height: 48px;
+                position: relative;
+            }
+
+            .dial {
+                position: absolute;
+                inset: 0;
                 transform-origin: center center;
                 will-change: transform;
-                cursor: ns-resize;
             }
 
             .knob-body {
@@ -50,17 +55,23 @@ function createTemplate(): string {
             }
 
             .indicator {
+                width: 4px;
+                height: 12px;
+                background: var(--nfe-accent, #00ffff);
                 position: absolute;
                 top: 4px;
                 left: 50%;
                 transform: translateX(-50%);
-                }
+                box-shadow: 0 0 6px var(--nfe-accent, #00ffff);
+            }
 
         </style>
 
         <div class="knob-wrapper">
             <div class="knob-body">
+                <div class="dial">
                 <div class="indicator"></div>
+                </div>
             </div>
         </div>
         <span class="label"></span>
@@ -82,6 +93,7 @@ class NfeKnob extends HTMLElement {
     private _knobWrapper!: HTMLElement;
     private _valueDisplay!: HTMLElement;
     private _labelEl!: HTMLElement;
+    private _dial!: HTMLElement;
 
     constructor() {
 
@@ -98,6 +110,8 @@ class NfeKnob extends HTMLElement {
         this._onMouseDown = this._onMouseDown.bind(this);
         this._onMouseMove = this._onMouseMove.bind(this);
         this._onMouseUp = this._onMouseUp.bind(this);
+
+        this._dial = shadow.querySelector('.dial') as HTMLElement;
     }
 
     // -- OBSERVED ATTRIBUTES --
@@ -188,7 +202,7 @@ class NfeKnob extends HTMLElement {
 
     private _render(): void {
     const angulo = this._mapValueToAngle(this._value, this._min, this._max);
-    this._knobWrapper.style.transform = `rotate(${angulo}deg)`;
+    this._dial.style.transform = `rotate(${angulo}deg)`;
     this._valueDisplay.textContent = String(Math.round(this._value));
     this._labelEl.textContent = this._label;
     }

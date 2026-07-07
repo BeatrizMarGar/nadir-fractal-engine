@@ -2,6 +2,20 @@ import { useEffect, useRef } from 'react';
 import { randomGrid, nextGeneration } from './engine/automata/gameOfLife';
 import { renderMatrix } from './engine/renderer';
 import type { ColorPalette } from './engine/renderer';
+import './components/nfe-knob/nfe-knob';
+
+declare module 'react' {
+  namespace JSX {
+    interface IntrinsicElements {
+      'nfe-knob': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        value?: string;
+        min?: string;
+        max?: string;
+        label?: string;
+      };
+    }
+  }
+}
 
 const GRID_WIDTH = 200;
 const GRID_HEIGHT = 150;
@@ -41,13 +55,14 @@ function App() {
   }, []);
 
   return (
-    <div style={{ background: '#0a0a0f', minHeight: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+    <div style={{ background: '#0a0a0f', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '24px' }}>
       <canvas
         ref={canvasRef}
         width={GRID_WIDTH}
         height={GRID_HEIGHT}
         style={{ width: '800px', height: '600px', imageRendering: 'pixelated' }}
       />
+      <nfe-knob value="6" min="1" max="20" label="SPEED"></nfe-knob>
     </div>
   );
 }
