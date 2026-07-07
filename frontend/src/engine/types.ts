@@ -8,3 +8,4 @@ export interface MandelbrotParams{
 }
 
 export type IterationMatrix = number[][];
+export type CellGrid = number[][]
