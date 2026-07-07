@@ -46,16 +46,15 @@ function createTemplate(): string {
                 height: 100%;
                 background: #0a0a0f;
                 border: 2px solid var(--nfe-accent, #00ffff);
-                box-shadow: 0 0 8px var(--nfe-accent, #00ffff);
+                box-shadow: 0 0 8px var(--nfe-accent, #00ffff), inset 0 0 8px rgba(0, 255, 255, 0.05);
             }
 
             .indicator {
-                width: 4px;
-                height: 12px;
-                background: var(--nfe-accent, #00ffff);
-                margin: 0 auto;
-                box-shadow: 0 0 6px var(--nfe-accent, #00ffff);
-            }
+                position: absolute;
+                top: 4px;
+                left: 50%;
+                transform: translateX(-50%);
+                }
 
         </style>
 
