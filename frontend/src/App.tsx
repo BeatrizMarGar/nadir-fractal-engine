@@ -29,6 +29,8 @@ const gameOfLifePalette: ColorPalette = (cell) => {
 function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const gridRef = useRef(randomGrid(GRID_WIDTH, GRID_HEIGHT, 0.3));
+const knobRef = useRef<HTMLElement>(null);
+const speedRef = useRef(FRAMES_PER_STEP);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -40,7 +42,7 @@ function App() {
     function animate() {
       frameCount++;
 
-      if (frameCount >= FRAMES_PER_STEP) {
+      if (frameCount >= speedRef.current) {
         frameCount = 0;
         gridRef.current = nextGeneration(gridRef.current);
         renderMatrix(canvas!, gridRef.current, 1, gameOfLifePalette);
@@ -54,6 +56,20 @@ function App() {
     return () => cancelAnimationFrame(animationId);
   }, []);
 
+  useEffect(() => {
+    const knob = knobRef.current;
+    if (knob === null) return;
+
+    const handler = (e: Event) => {
+      const detail = (e as CustomEvent).detail;
+      speedRef.current = 21 - detail.value;
+    };
+
+    knob.addEventListener('nfe-change', handler);
+
+    return () => knob.removeEventListener('nfe-change', handler);
+  }, []);
+
   return (
     <div style={{ background: '#0a0a0f', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '24px' }}>
       <canvas
@@ -62,7 +78,7 @@ function App() {
         height={GRID_HEIGHT}
         style={{ width: '800px', height: '600px', imageRendering: 'pixelated' }}
       />
-      <nfe-knob value="6" min="1" max="20" label="SPEED"></nfe-knob>
+      <nfe-knob ref={knobRef} value="15" min="1" max="20" label="SPEED"></nfe-knob>
     </div>
   );
 }
