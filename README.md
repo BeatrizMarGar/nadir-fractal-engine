@@ -75,8 +75,8 @@ Each technology does exactly what it does best and nothing else:
 - [x] Vite + React + TypeScript scaffold
 - [x] Folder structure and Git setup
 - [x] `<nfe-fader>` Web Component
-- [ ] `<nfe-knob>` Web Component
-- [ ] Mandelbrot set Canvas renderer
+- [x] `<nfe-knob>` Web Component
+- [x] Mandelbrot set Canvas renderer
 - [ ] Cellular automaton (Game of Life)
 - [ ] FastAPI backend + fractal algorithms
 - [ ] REST + WebSockets integration
