@@ -77,7 +77,7 @@ Each technology does exactly what it does best and nothing else:
 - [x] `<nfe-fader>` Web Component
 - [x] `<nfe-knob>` Web Component
 - [x] Mandelbrot set Canvas renderer
-- [ ] Cellular automaton (Game of Life)
+- [x] Cellular automaton (Game of Life)
 - [ ] FastAPI backend + fractal algorithms
 - [ ] REST + WebSockets integration
 - [ ] Full UI — cyberpunk console aesthetic
