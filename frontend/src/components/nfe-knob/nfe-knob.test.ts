@@ -89,9 +89,9 @@ describe("Pruebas unitarias para el componente NfeKnob", () => {
             eventoRecibido = e as CustomEvent;
         })
         const thumb = (elemento as any)._knobWrapper as HTMLElement;
-        thumb.dispatchEvent(new MouseEvent('mousedown', {clientY: 100, bubbles: true}));
-        document.dispatchEvent(new MouseEvent('mousemove', {clientY: 50, bubbles: true}))
-        document.dispatchEvent(new MouseEvent('mouseup', {bubbles: true}))
+        thumb.dispatchEvent(new MouseEvent('pointerdown', {clientY: 100, bubbles: true, cancelable: true }));
+        document.dispatchEvent(new MouseEvent('pointermove', {clientY: 50, bubbles: true}))
+        document.dispatchEvent(new MouseEvent('pointerup', {bubbles: true}))
 
         expect(eventoRecibido).not.toBeNull();
 
