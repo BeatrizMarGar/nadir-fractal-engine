@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { randomGrid, nextGeneration } from './engine/automata/gameOfLife';
 import { renderMatrix } from './engine/renderer';
 import type { ColorPalette } from './engine/renderer';
@@ -29,8 +29,9 @@ const gameOfLifePalette: ColorPalette = (cell) => {
 function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const gridRef = useRef(randomGrid(GRID_WIDTH, GRID_HEIGHT, 0.3));
-const knobRef = useRef<HTMLElement>(null);
-const speedRef = useRef(FRAMES_PER_STEP);
+  const knobRef = useRef<HTMLElement>(null);
+  const speedRef = useRef(FRAMES_PER_STEP);
+  const [mode, setMode] = useState<'fractal' | 'life'>('life');
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -56,30 +57,35 @@ const speedRef = useRef(FRAMES_PER_STEP);
     return () => cancelAnimationFrame(animationId);
   }, []);
 
-  useEffect(() => {
-    const knob = knobRef.current;
-    if (knob === null) return;
+    const knobCallbackRef = (knob: HTMLElement | null) => {
+      if (knob === null) return;   // desmontaje — no hacemos nada
 
-    const handler = (e: Event) => {
-      const detail = (e as CustomEvent).detail;
-      speedRef.current = 21 - detail.value;
+      const handler = (e: Event) => {
+        const detail = (e as CustomEvent).detail;
+        speedRef.current = 21 - detail.value;
+      };
+
+      knob.addEventListener('nfe-change', handler);
     };
-
-    knob.addEventListener('nfe-change', handler);
-
-    return () => knob.removeEventListener('nfe-change', handler);
-  }, []);
 
   return (
     <div style={{ background: '#0a0a0f', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '24px' }}>
+      
+      <div style={{ display: 'flex', gap: '12px' }}>
+        <button onClick={() => setMode('fractal')}>FRACTAL</button>
+        <button onClick={() => setMode('life')}>LIFE</button>
+      </div>
+
       <canvas
         ref={canvasRef}
         width={GRID_WIDTH}
         height={GRID_HEIGHT}
         style={{ width: '800px', height: '600px', imageRendering: 'pixelated' }}
       />
-      <nfe-knob ref={knobRef} value="15" min="1" max="20" label="SPEED"></nfe-knob>
-    </div>
+      {mode === 'life' && (
+        <nfe-knob ref={knobCallbackRef} value="15" min="1" max="20" label="SPEED"></nfe-knob>
+      )}
+      </div>
   );
 }
 
