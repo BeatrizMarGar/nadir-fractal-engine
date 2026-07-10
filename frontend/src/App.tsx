@@ -4,6 +4,7 @@ import { renderMatrix, vaporwave } from './engine/renderer';
 import type { ColorPalette } from './engine/renderer';
 import { computeMandelbrot } from './engine/fractals/mandelbrot';
 import './components/nfe-knob/nfe-knob';
+import './App.css'
 
 declare module 'react' {
   namespace JSX {
@@ -18,8 +19,8 @@ declare module 'react' {
   }
 }
 
-const GRID_WIDTH = 200;
-const GRID_HEIGHT = 150;
+const GRID_WIDTH = 400;
+const GRID_HEIGHT = 225;
 const FRAMES_PER_STEP = 6;
 
 const gameOfLifePalette: ColorPalette = (cell) => {
@@ -121,35 +122,52 @@ function App() {
     knob.addEventListener('nfe-change', handler);
   };
 
-  return (
-    <div style={{ background: '#0a0a0f', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '24px' }}>
-      
-      <div style={{ display: 'flex', gap: '12px' }}>
-        <button onClick={() => setMode('fractal')}>FRACTAL</button>
-        <button onClick={() => setMode('life')}>LIFE</button>
-      </div>
+return (
+    <div className="console">
+      <div className="console-frame">
 
-      <canvas
-        ref={canvasRef}
-        width={GRID_WIDTH}
-        height={GRID_HEIGHT}
-        style={{ width: '800px', height: '600px', imageRendering: 'pixelated' }}
-      />
+        <header className="console-header">
+          <h1 className="console-title">✦ NADIR FRACTAL ENGINE ✦</h1>
+          <p className="console-subtitle">ACTIVE ART GENERATOR: FRACTAL_SYNTH_v0.9</p>
+        </header>
 
-      {mode === 'life' && (
-        <nfe-knob ref={knobCallbackRef} value="15" min="1" max="20" label="SPEED"></nfe-knob>
-      )}
-
-      {mode === 'fractal' && (
-        <div style={{ display: 'flex', gap: '16px' }}>
-          
-        <nfe-knob ref={zoomCallbackRef} min="1" max="50" value="1" label="ZOOM"></nfe-knob>
-        <nfe-knob ref={iterCallbackRef} min="50" max="500" value="100" label="ITER"></nfe-knob>
-        <nfe-knob ref={xCallbackRef} min="-250" max="100" value="-75" label="POS X"></nfe-knob>
-        <nfe-knob ref={yCallbackRef} min="-125" max="125" value="0" label="POS Y"></nfe-knob>
-
+        <div className="mode-selector">
+          <button
+            className={mode === 'fractal' ? 'mode-btn active' : 'mode-btn'}
+            onClick={() => setMode('fractal')}
+          >FRACTAL</button>
+          <button
+            className={mode === 'life' ? 'mode-btn active' : 'mode-btn'}
+            onClick={() => setMode('life')}
+          >LIFE</button>
         </div>
-      )}
+
+        <div className="screen-frame">
+          <canvas
+            ref={canvasRef}
+            width={GRID_WIDTH}
+            height={GRID_HEIGHT}
+          />
+        </div>
+
+        <div className="control-panel">
+          <div className="control-panel-title">◆ ALGORITHM PARAMS ◆</div>
+          <div className="control-row">
+            {mode === 'life' && (
+              <nfe-knob ref={knobCallbackRef} min="1" max="20" value="15" label="SPEED"></nfe-knob>
+            )}
+            {mode === 'fractal' && (
+              <>
+                <nfe-knob ref={zoomCallbackRef} min="1" max="200" value="1" label="ZOOM"></nfe-knob>
+                <nfe-knob ref={iterCallbackRef} min="50" max="500" value="100" label="ITER"></nfe-knob>
+                <nfe-knob ref={xCallbackRef} min="-250" max="100" value="-75" label="POS X"></nfe-knob>
+                <nfe-knob ref={yCallbackRef} min="-125" max="125" value="0" label="POS Y"></nfe-knob>
+              </>
+            )}
+          </div>
+        </div>
+
+      </div>
     </div>
   );
 }

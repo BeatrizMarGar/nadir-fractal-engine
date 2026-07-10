@@ -28,43 +28,68 @@ function createTemplate(): string {
                 display: inline-flex;
                 flex-direction: column;
                 align-items: center;
-                gap: 8px;
+                gap: 6px;
                 cursor: ns-resize;
                 user-select: none;
-            }
-            
-            .knob-wrapper {
-                width: 48px;
-                height: 48px;
-                position: relative;
-            }
+                -webkit-user-select: none;
+                font-family: inherit;
+                touch-action: none; 
+                }
 
-            .dial {
+                .knob-wrapper {
+                width: 56px;
+                height: 56px;
+                position: relative;
+                background: #1b1430;
+                border: 3px solid;
+                border-color: #14101f #554a75 #554a75 #14101f;
+                }
+
+                .knob-body {
+                position: absolute;
+                inset: 6px;
+                background: linear-gradient(135deg, #3d3358 0%, #241d38 60%, #1b1430 100%);
+                border: 2px solid;
+                border-color: #6a5f8a #14101f #14101f #6a5f8a;
+                }
+
+                .dial {
                 position: absolute;
                 inset: 0;
                 transform-origin: center center;
                 will-change: transform;
-            }
+                }
 
-            .knob-body {
-                width: 100%;
-                height: 100%;
-                background: #0a0a0f;
-                border: 2px solid var(--nfe-accent, #00ffff);
-                box-shadow: 0 0 8px var(--nfe-accent, #00ffff), inset 0 0 8px rgba(0, 255, 255, 0.05);
-            }
-
-            .indicator {
-                width: 4px;
+                .indicator {
+                width: 6px;
                 height: 12px;
                 background: var(--nfe-accent, #00ffff);
                 position: absolute;
-                top: 4px;
+                top: 2px;
                 left: 50%;
                 transform: translateX(-50%);
                 box-shadow: 0 0 6px var(--nfe-accent, #00ffff);
-            }
+                }
 
+                .label {
+                font-family: inherit;
+                font-size: 7px;
+                color: #7d739e;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+                }
+
+                .value-display {
+                font-family: inherit;
+                font-size: 9px;
+                color: var(--nfe-accent, #00ffff);
+                min-width: 3ch;
+                text-align: center;
+                background: #14101f;
+                padding: 4px 6px;
+                border: 2px solid;
+                border-color: #14101f #3d3358 #3d3358 #14101f;
+                }
         </style>
 
         <div class="knob-wrapper">
@@ -107,9 +132,9 @@ class NfeKnob extends HTMLElement {
         this._valueDisplay = shadow.querySelector('.value-display') as HTMLElement;
         this._labelEl = shadow.querySelector('.label') as HTMLElement;
 
-        this._onMouseDown = this._onMouseDown.bind(this);
-        this._onMouseMove = this._onMouseMove.bind(this);
-        this._onMouseUp = this._onMouseUp.bind(this);
+        this._onpointerdown = this._onpointerdown.bind(this);
+        this._onpointermove = this._onpointermove.bind(this);
+        this._onpointerup = this._onpointerup.bind(this);
 
         this._dial = shadow.querySelector('.dial') as HTMLElement;
     }
@@ -154,30 +179,30 @@ class NfeKnob extends HTMLElement {
 // -- CONNECTED CALLBACK --
 
     connectedCallback(): void{
-        this._knobWrapper.addEventListener('mousedown', this._onMouseDown);
+        this._knobWrapper.addEventListener('pointerdown', this._onpointerdown);
         this._render();
     }
 
 // DISCONNECTED CALLBACK --
 
     disconnectedCallback(): void{
-        this._knobWrapper.removeEventListener('mousedown', this._onMouseDown);
-        document.removeEventListener('mousemove', this._onMouseMove);
-        document.removeEventListener('mouseup', this._onMouseUp);
+        this._knobWrapper.removeEventListener('pointerdown', this._onpointerdown);
+        document.removeEventListener('pointermove', this._onpointermove);
+        document.removeEventListener('pointerup', this._onpointerup);
     }
 
 // -- LÓGICA DEL DRAG --
 
-    private _onMouseDown(e: MouseEvent): void{
+    private _onpointerdown(e: MouseEvent): void{
         this._isDragging = true;
         this._dragStartY = e.clientY;
         this._dragStartValue = this._value;
 
-        document.addEventListener('mouseup', this._onMouseUp);
-        document.addEventListener('mousemove', this._onMouseMove);
+        document.addEventListener('pointerup', this._onpointerup);
+        document.addEventListener('pointermove', this._onpointermove);
     }
 
-    private _onMouseMove(e: MouseEvent): void {
+    private _onpointermove(e: MouseEvent): void {
         if(!this._isDragging) return;
             const delta = this._dragStartY - e.clientY;
             const sensitivity = (this._max - this._min) / DRAG_SENSITIVITY_PX
@@ -188,10 +213,10 @@ class NfeKnob extends HTMLElement {
             this._emitChange();
         }
 
-    private _onMouseUp(): void{
+    private _onpointerup(): void{
         this._isDragging = false;
-        document.removeEventListener('mousemove', this._onMouseMove);
-        document.removeEventListener('mouseup', this._onMouseUp);
+        document.removeEventListener('pointermove', this._onpointermove);
+        document.removeEventListener('pointerup', this._onpointerup);
     }
 
     private _mapValueToAngle(value: number, min: number, max: number): number{

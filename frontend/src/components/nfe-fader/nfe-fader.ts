@@ -29,6 +29,7 @@ function createTemplate(): string {
                 gap: 8px;
                 cursor: ns-resize;
                 user-select: none;
+                touch-action: none; 
             }
             .track {
                 width: 24px;
@@ -99,9 +100,9 @@ class NfeFader extends HTMLElement {
         this._valueDisplay = shadow.querySelector('.value-display') as HTMLElement;
         this._labelEl = shadow.querySelector('.label') as HTMLElement;
 
-        this._onMouseDown = this._onMouseDown.bind(this);
-        this._onMouseMove = this._onMouseMove.bind(this);
-        this._onMouseUp = this._onMouseUp.bind(this);
+        this._onpointerdown = this._onpointerdown.bind(this);
+        this._onpointermove = this._onpointermove.bind(this);
+        this._onpointerup = this._onpointerup.bind(this);
     }
 
     // -- OBSERVED ATTRIBUTES --
@@ -143,29 +144,29 @@ class NfeFader extends HTMLElement {
 
     // -- CONNECTED y DISCONNECTED CALLBACK -- 
     connectedCallback(): void {
-        this._thumb.addEventListener('mousedown', this._onMouseDown);
+        this._thumb.addEventListener('pointerdown', this._onpointerdown);
         this._render();
     }
 
     disconnectedCallback(): void{
-        this._thumb.removeEventListener('mousedown', this._onMouseDown);
-        document.removeEventListener('mousemove', this._onMouseMove);
-        document.removeEventListener('mouseup', this._onMouseUp);
+        this._thumb.removeEventListener('pointerdown', this._onpointerdown);
+        document.removeEventListener('pointermove', this._onpointermove);
+        document.removeEventListener('pointerup', this._onpointerup);
     }
 
     // -- LÓGICA DEL DRAG --
 
-    private _onMouseDown(e: MouseEvent): void{
+    private _onpointerdown(e: MouseEvent): void{
         this._isDragging= true;
         this._dragStartY= e.clientY;
         this._dragStartValue = this._value;
         
-        document.addEventListener('mouseup', this._onMouseUp);
-        document.addEventListener('mousemove', this._onMouseMove);
+        document.addEventListener('pointerup', this._onpointerup);
+        document.addEventListener('pointermove', this._onpointermove);
         
     }
 
-    private _onMouseMove(e: MouseEvent): void {
+    private _onpointermove(e: MouseEvent): void {
         if(!this._isDragging) return;
 
         const delta = this._dragStartY - e.clientY;
@@ -177,10 +178,10 @@ class NfeFader extends HTMLElement {
         this._emitChange();
     }
 
-    private _onMouseUp(): void{
+    private _onpointerup(): void{
         this._isDragging = false;
-        document.removeEventListener('mousemove', this._onMouseMove)
-        document.removeEventListener('mouseup', this._onMouseUp);
+        document.removeEventListener('pointermove', this._onpointermove)
+        document.removeEventListener('pointerup', this._onpointerup);
     }
 
     private _render(): void{
