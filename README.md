@@ -26,13 +26,12 @@ Cada tecnología hace exactamente lo que mejor sabe hacer y nada más:
 
 - [x] Scaffold Vite + React + TypeScript
 - [x] Estructura de carpetas y Git
-- [ ] Web Component `<nfe-fader>`
-- [ ] Web Component `<nfe-knob>`
-- [ ] Renderizado Mandelbrot en Canvas
-- [ ] Autómata celular (Game of Life)
-- [ ] Backend FastAPI + algoritmos fractales
-- [ ] Integración REST + WebSockets
-- [ ] UI completa — estética consola ciberpunk
+- [x] Web Component `<nfe-fader>`
+- [x] Web Component `<nfe-knob>`
+- [x] Renderizado Mandelbrot en Canvas
+- [x] Autómata celular (Game of Life)
+- [x] UI consola ciberpunk — responsive y táctil
+- [x] Tests unitarios (Vitest) + CI/CD con GitHub Actions
 
 ### Arrancar en local
 
